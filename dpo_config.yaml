@@ -1,0 +1,198 @@
+### ========================================
+### DPO (Direct Preference Optimization) 训练配置文件
+### 用于在SFT基础上进行强化学习，提高指令遵循能力
+### ========================================
+
+### ========================================
+### 模型配置 (Model Configuration)
+### ========================================
+
+# 基础模型路径（使用SFT后的模型）
+# 建议使用SFT训练后的最新checkpoint作为基础模型
+# 例如: ./saves/qwen3-4b-base/lora/sft/checkpoint-2000
+model_name_or_path: ./Qwen3-4B-Base
+
+# SFT后的LoRA适配器路径（必填）
+# 这是您SFT训练后保存的checkpoint路径
+# 例如: ./saves/qwen3-4b-base/lora/sft/checkpoint-2000
+adapter_name_or_path: ./saves/qwen3-4b-base/lora/sft/checkpoint-2532
+
+# 信任远程代码执行
+trust_remote_code: true
+
+# 参考模型路径（可选）
+# 如果不设置或为null，将使用model_name_or_path作为参考模型
+# 参考模型用于KL散度约束，防止模型过度偏离原始分布
+# ref_model: null  # 默认使用model_name_or_path
+
+
+### ========================================
+### 训练方法配置 (Training Method Configuration)
+### ========================================
+
+# 训练阶段：dpo (Direct Preference Optimization)
+stage: dpo
+
+# 是否执行训练
+do_train: true
+
+# 微调类型：lora (Low-Rank Adaptation)
+finetuning_type: lora
+
+# LoRA配置（与SFT保持一致或适当调整）
+lora_target: all
+lora_rank: 16  # 可以保持与SFT相同的rank，或适当减小（如8）以节省显存
+lora_alpha: 32  # 通常设为rank的2倍
+lora_dropout: 0.05
+
+
+### ========================================
+### DPO超参数配置 (DPO Hyperparameters)
+### ========================================
+
+# DPO的beta参数：控制KL散度约束的强度
+# 较大的beta（如0.5）会更强地约束模型不偏离参考模型，但可能限制学习能力
+# 较小的beta（如0.1）允许更大的改变，但可能导致过度优化
+# 推荐范围: 0.1-0.5，对于4B模型通常使用0.1
+pref_beta: 0.1
+
+# DPO损失函数类型
+# - sigmoid: 标准DPO损失（推荐）
+# - hinge: Hinge损失，对outlier更鲁棒
+# - ipo: Identity Preference Optimization
+# - orpo: Odds Ratio Preference Optimization（不需要参考模型）
+# - simpo: Simple Preference Optimization（不需要参考模型）
+pref_loss: sigmoid
+
+# 监督微调损失系数（在DPO训练中加入SFT损失）
+# 0.0表示只使用DPO损失，>0表示混合SFT和DPO损失
+# 推荐: 0.0（纯DPO）或0.1（少量SFT辅助）
+pref_ftx: 0.0
+
+# DPO标签平滑（robust DPO）
+# 0.0表示不使用标签平滑，推荐范围: 0.0-0.1
+dpo_label_smoothing: 0.0
+
+
+### ========================================
+### 数据集配置 (Dataset Configuration)
+### ========================================
+
+# 偏好数据集名称（在 data/dataset_info.json 中定义）
+# 推荐数据集:
+# - ultrafeedback: 英文，约6.4万条偏好对（推荐）
+# - orca_dpo: 英文，约10万条偏好对
+# - dpo_en_zh: 中英文混合，约2万条偏好对
+dataset: ultrafeedback
+
+# 数据集目录
+dataset_dir: ./data
+
+# 模板类型：qwen3（必须与模型匹配）
+template: qwen3
+
+# 最大序列长度
+cutoff_len: 2048
+
+# 最大训练样本数（可选，用于快速测试或限制训练数据量）
+# 设置为20000以将训练时间控制在约3小时（从约15小时缩短）
+# 如果设置为null，将使用全部数据（约6.1万条，需要约15小时）
+max_samples: 20000
+
+# 是否覆盖已存在的缓存
+overwrite_cache: false  # DPO训练通常不需要重新处理数据
+
+# 数据预处理工作进程数
+preprocessing_num_workers: 16
+
+
+### ========================================
+### 输出配置 (Output Configuration)
+### ========================================
+
+# 输出目录：保存DPO训练检查点
+output_dir: ./saves/qwen3-4b-base/lora/dpo
+
+# 日志记录频率：每10步记录一次
+logging_steps: 10
+
+# 模型保存频率：每500步保存一次检查点
+save_steps: 200
+
+# 是否绘制损失曲线
+plot_loss: true
+
+# 是否覆盖输出目录
+overwrite_output_dir: true
+
+# 是否只保存模型（不保存优化器等状态，节省空间）
+save_only_model: false
+
+
+### ========================================
+### 训练超参数配置 (Training Hyperparameters)
+### ========================================
+
+# 每个设备的训练批次大小：1
+# DPO训练通常使用较小的batch size，因为需要同时计算chosen和rejected的logits
+per_device_train_batch_size: 1
+
+# 梯度累积步数：8
+# 有效批次大小 = per_device_train_batch_size × gradient_accumulation_steps × GPU数量
+# 当前配置: 1 × 8 × 2 = 16（对于DPO训练是合理的）
+gradient_accumulation_steps: 8
+
+# 学习率：5.0e-6 (0.000005)
+# DPO训练使用较小的学习率，因为是在已微调的模型基础上进一步优化
+# 推荐范围: 1.0e-6 到 5.0e-6，通常使用5.0e-6
+learning_rate: 5.0e-6
+
+# 训练轮数：1.5
+# 从3.0减少到1.5以缩短训练时间（从约15小时缩短到约3小时）
+# DPO训练通常需要较少的epoch，因为偏好数据已经包含了明确的优化方向
+# 1.5 epochs配合20000样本可以在约3小时内完成训练，同时保持足够的训练效果
+# 推荐范围: 1.0-3.0，完整训练使用2.0-3.0，快速训练使用1.0-1.5
+num_train_epochs: 1.5
+
+# 学习率调度器类型：cosine (余弦退火)
+lr_scheduler_type: cosine
+
+# 预热比例：0.1 (前10%的训练步数用于预热)
+warmup_ratio: 0.1
+
+# 是否使用bfloat16混合精度训练
+bf16: true
+
+# 是否启用梯度检查点（节省显存）
+gradient_checkpointing: true
+
+# DDP超时时间（秒）
+ddp_timeout: 1800
+
+# 从checkpoint恢复训练（如果需要继续训练）
+resume_from_checkpoint: null
+
+
+### ========================================
+### 评估配置 (Evaluation Configuration)
+### ========================================
+
+# 注意：DPO训练通常不进行传统评估，而是通过人工检查生成质量来判断
+# 如果需要评估，可以使用评估脚本在训练后进行测试
+
+# 验证集比例（可选）
+# val_size: 0.1
+
+# 评估策略
+# eval_strategy: steps
+# eval_steps: 500
+# per_device_eval_batch_size: 1
+
+
+### ========================================
+### 其他配置 (Other Configuration)
+### ========================================
+
+# 报告到（日志平台）
+report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+

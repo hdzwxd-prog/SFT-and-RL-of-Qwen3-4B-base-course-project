@@ -1,0 +1,45 @@
+### ========================================
+### 模型评估配置文件（低显存版本）
+### 用于GPU显存不足时或训练过程中进行评估
+### ========================================
+
+### 模型配置
+model_name_or_path: ./Qwen3-4B-Base
+adapter_name_or_path: ./saves/qwen3-4b-base/lora/sft/checkpoint-2000  # 修改为你要评估的checkpoint路径
+trust_remote_code: true
+
+### 训练阶段和微调方法配置
+stage: sft
+finetuning_type: lora
+template: qwen3
+
+### 数据集配置
+# 评估数据集（必须指定）
+eval_dataset: tulu3_sft_personas
+dataset_dir: ./data
+cutoff_len: 2048
+max_samples: 50  # 进一步减少评估样本数量
+
+### 评估配置
+do_eval: true
+do_predict: true
+per_device_eval_batch_size: 1  # 最小batch size
+predict_with_generate: true
+overwrite_cache: false  # 使用缓存，避免重复处理
+
+### 生成配置
+max_new_tokens: 256  # 减少生成长度
+temperature: 0.7
+top_p: 0.9
+do_sample: true
+
+### 输出配置
+output_dir: ./evaluation_results
+report_to: none
+
+### 训练配置（评估时不需要，但必须设置）
+do_train: false
+
+### 显存优化（如果需要，取消注释）
+# quantization_bit: 8  # 8bit量化可以大幅减少显存占用
+

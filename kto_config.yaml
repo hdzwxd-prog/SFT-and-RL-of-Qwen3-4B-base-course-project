@@ -1,0 +1,97 @@
+### ========================================
+### KTO (Kahneman-Tversky Optimization) 训练配置文件
+### 备选方案：KTO不需要chosen/rejected对，只需要标注desirable/undesirable
+### ========================================
+
+### ========================================
+### 模型配置 (Model Configuration)
+### ========================================
+
+# 基础模型路径
+model_name_or_path: ./Qwen3-4B-Base
+
+# SFT后的LoRA适配器路径
+adapter_name_or_path: ./saves/qwen3-4b-base/lora/sft/checkpoint-2000
+
+trust_remote_code: true
+
+
+### ========================================
+### 训练方法配置 (Training Method Configuration)
+### ========================================
+
+stage: kto
+
+do_train: true
+
+finetuning_type: lora
+
+lora_target: all
+lora_rank: 16
+lora_alpha: 32
+lora_dropout: 0.05
+
+
+### ========================================
+### KTO超参数配置 (KTO Hyperparameters)
+### ========================================
+
+# KTO的beta参数（类似DPO）
+pref_beta: 0.1
+
+# Desirable样本的权重（通常设为1.0）
+kto_chosen_weight: 1.0
+
+# Undesirable样本的权重（通常设为1.0，可以适当增大以强化惩罚）
+kto_rejected_weight: 1.0
+
+
+### ========================================
+### 数据集配置 (Dataset Configuration)
+### ========================================
+
+# KTO数据集（需要kto_tag列，标注为"desirable"或"undesirable"）
+# 注意：KTO数据集的格式与DPO不同，需要kto_tag字段
+dataset: ultrafeedback_kto  # 需要使用KTO格式的数据集
+
+dataset_dir: ./data
+template: qwen3
+cutoff_len: 2048
+overwrite_cache: false
+preprocessing_num_workers: 16
+
+
+### ========================================
+### 输出配置 (Output Configuration)
+### ========================================
+
+output_dir: ./saves/qwen3-4b-base/lora/kto
+logging_steps: 10
+save_steps: 500
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+
+
+### ========================================
+### 训练超参数配置 (Training Hyperparameters)
+### ========================================
+
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 5.0e-6
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+gradient_checkpointing: true
+ddp_timeout: 1800
+resume_from_checkpoint: null
+
+
+### ========================================
+### 其他配置 (Other Configuration)
+### ========================================
+
+report_to: none
+

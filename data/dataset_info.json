@@ -1,0 +1,46 @@
+{
+  "tulu3_sft_personas": {
+    "hf_hub_url": "allenai/tulu-3-sft-personas-instruction-following",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant",
+      "system_tag": "system"
+    }
+  },
+  "ultrafeedback": {
+    "hf_hub_url": "llamafactory/ultrafeedback_binarized",
+    "ms_hub_url": "llamafactory/ultrafeedback_binarized",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "chosen": "chosen",
+      "rejected": "rejected"
+    }
+  },
+  "orca_dpo": {
+    "hf_hub_url": "Intel/orca_dpo_pairs",
+    "ranking": true,
+    "columns": {
+      "prompt": "question",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "system": "system"
+    }
+  },
+  "dpo_en_zh": {
+    "hf_hub_url": "hiyouga/DPO-En-Zh-20k",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "chosen": "chosen",
+      "rejected": "rejected"
+    }
+  }
+}
+

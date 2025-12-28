@@ -1,0 +1,58 @@
+{
+    "Academic Knowledge": [
+        {
+            "dataset_name": "MMLU",
+            "status": "Success ✅",
+            "sample_count": 14042,
+            "preview": "{'question': 'Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.', 'subject': 'abstract_algebra', 'choices': ['0', '4..."
+        },
+        {
+            "dataset_name": "ARC-Challenge",
+            "status": "Success ✅",
+            "sample_count": 1172,
+            "preview": "{'id': 'Mercury_7175875', 'question': 'An astronomer observes that a planet rotates faster after a meteorite impact. Which is the most likely effect o..."
+        }
+    ],
+    "Commonsense Reasoning": [
+        {
+            "dataset_name": "HellaSwag",
+            "status": "Success ✅",
+            "sample_count": 10042,
+            "preview": "{'ind': 24, 'activity_label': 'Roof shingle removal', 'ctx_a': 'A man is sitting on a roof.', 'ctx_b': 'he', 'ctx': 'A man is sitting on a roof. he', ..."
+        },
+        {
+            "dataset_name": "WinoGrande",
+            "status": "Success ✅",
+            "sample_count": 1267,
+            "preview": "{'sentence': 'Sarah was a much better surgeon than Maria so _ always got the easier cases.', 'option1': 'Sarah', 'option2': 'Maria', 'answer': '2'}..."
+        },
+        {
+            "dataset_name": "CSQA",
+            "status": "Success ✅",
+            "sample_count": 1221,
+            "preview": "{'id': '1afa02df02c908a558b4036e80242fac', 'question': 'A revolving door is convenient for two direction travel, but it also serves as a security meas..."
+        }
+    ],
+    "Physical Reasoning": [
+        {
+            "dataset_name": "PIQA",
+            "status": "Error ❌: Dataset scripts are no longer supported, but found piqa.py"
+        }
+    ],
+    "Math & Logic": [
+        {
+            "dataset_name": "GSM8K",
+            "status": "Success ✅",
+            "sample_count": 1319,
+            "preview": "{'question': \"Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She..."
+        }
+    ],
+    "Instruction Following": [
+        {
+            "dataset_name": "IFEval",
+            "status": "Success ✅",
+            "sample_count": 541,
+            "preview": "{'key': 1000, 'prompt': 'Write a 300+ word summary of the wikipedia page \"https://en.wikipedia.org/wiki/Raymond_III,_Count_of_Tripoli\". Do not use any..."
+        }
+    ]
+}

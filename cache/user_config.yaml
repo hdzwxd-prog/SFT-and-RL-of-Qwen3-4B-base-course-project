@@ -1,0 +1,5 @@
+cache_dir: null
+lang: en
+last_model: Qwen3-4B-Base
+path_dict:
+  Qwen3-4B-Base: /home/test/fxdproject/MLS_project/Qwen3-4B-Base

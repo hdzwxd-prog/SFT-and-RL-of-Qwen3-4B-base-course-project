@@ -1,0 +1,60 @@
+{
+    "Commonsense Reasoning": [
+        {
+            "task": "winogrande",
+            "error": "module 'lm_eval.evaluator' has no attribute 'load_model'",
+            "group": "Commonsense Reasoning",
+            "timestamp": "2025-12-20 16:21:14"
+        },
+        {
+            "task": "commonsense_qa",
+            "error": "must be called with a dataclass type or instance",
+            "group": "Commonsense Reasoning",
+            "timestamp": "2025-12-20 16:21:20"
+        }
+    ],
+    "Physical Reasoning": [
+        {
+            "task": "piqa",
+            "error": "Couldn't reach the Hugging Face Hub for dataset 'baber/piqa': Offline mode is enabled.",
+            "group": "Physical Reasoning",
+            "timestamp": "2025-12-20 16:21:25"
+        },
+        {
+            "task": "arc_challenge",
+            "error": "module 'lm_eval.evaluator' has no attribute 'load_model'",
+            "group": "Physical Reasoning",
+            "timestamp": "2025-12-20 16:21:30"
+        }
+    ],
+    "Math & Logic": [
+        {
+            "task": "gsm8k",
+            "error": "module 'lm_eval.evaluator' has no attribute 'load_model'",
+            "group": "Math & Logic",
+            "timestamp": "2025-12-20 16:21:36"
+        }
+    ],
+    "Academic Knowledge": [
+        {
+            "task": "mmlu",
+            "error": "module 'lm_eval.evaluator' has no attribute 'load_model'",
+            "group": "Academic Knowledge",
+            "timestamp": "2025-12-20 16:21:03"
+        },
+        {
+            "task": "arc_challenge",
+            "error": "module 'lm_eval.evaluator' has no attribute 'load_model'",
+            "group": "Academic Knowledge",
+            "timestamp": "2025-12-20 16:21:08"
+        }
+    ],
+    "Instruction Following": [
+        {
+            "task": "ifeval",
+            "error": "module 'lm_eval.evaluator' has no attribute 'load_model'",
+            "group": "Instruction Following",
+            "timestamp": "2025-12-20 16:21:42"
+        }
+    ]
+}

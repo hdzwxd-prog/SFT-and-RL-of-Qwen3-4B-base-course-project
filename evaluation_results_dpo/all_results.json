@@ -1,0 +1,18 @@
+{
+    "eval_bleu-4": 31.995006000000004,
+    "eval_model_preparation_time": 0.0039,
+    "eval_rouge-1": 38.086702,
+    "eval_rouge-2": 18.995113,
+    "eval_rouge-l": 20.485706,
+    "eval_runtime": 648.1493,
+    "eval_samples_per_second": 0.154,
+    "eval_steps_per_second": 0.077,
+    "predict_bleu-4": 33.054497,
+    "predict_model_preparation_time": 0.0039,
+    "predict_rouge-1": 38.421812,
+    "predict_rouge-2": 19.020493000000002,
+    "predict_rouge-l": 20.520346,
+    "predict_runtime": 644.5211,
+    "predict_samples_per_second": 0.155,
+    "predict_steps_per_second": 0.078
+}

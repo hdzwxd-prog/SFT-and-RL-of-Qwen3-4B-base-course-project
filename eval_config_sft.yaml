@@ -1,0 +1,41 @@
+### ========================================
+### 模型评估配置文件 - SFT
+### ========================================
+
+### 模型配置
+model_name_or_path: ./Qwen3-4B-Base
+adapter_name_or_path: ./saves/qwen3-4b-base/lora/sft/checkpoint-2532
+
+trust_remote_code: true
+
+### 训练阶段和微调方法配置
+stage: sft
+finetuning_type: lora
+template: qwen3
+
+### 数据集配置
+eval_dataset: tulu3_sft_personas
+dataset_dir: ./data
+cutoff_len: 2048
+max_samples: 100
+
+### 评估配置
+do_eval: true
+do_predict: true
+per_device_eval_batch_size: 1
+predict_with_generate: true
+overwrite_cache: true
+
+### 生成配置
+max_new_tokens: 512
+temperature: 0.7
+top_p: 0.9
+do_sample: true
+
+### 输出配置
+output_dir: ./evaluation_results_sft_checkpoint-2532
+report_to: none
+
+### 训练配置（评估时不需要，但必须设置）
+do_train: false
+
